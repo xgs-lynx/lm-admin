@@ -10,6 +10,11 @@ export function systemLogLists(params: any) {
     return request.get({ url: '/system/log/operate', params })
 }
 
+// 获取登录日志列表
+export function systemLogLoginLists(params: any) {
+    return request.get({ url: '/system/log/login', params })
+}
+
 // 系统缓存监控
 export function systemCache() {
     return request.get({ url: '/monitor/cache' })

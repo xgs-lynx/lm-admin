@@ -11,4 +11,10 @@ export class SystemLogController {
     const data = await this.logService.operate(listReq);
     return ok(data);
   }
+
+  @Get('login')
+  async login(@Query() listReq: any): Promise<ApiResult> {
+    const data = await this.logService.login(listReq);
+    return ok(data);
+  }
 }
