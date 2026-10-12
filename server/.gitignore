@@ -1,0 +1,17 @@
+node_modules/
+dist/
+*.tsbuildinfo
+
+# 本地环境变量（参考 .env.example）
+.env
+
+# 运行时产物
+public/uploads/*
+!public/uploads/image/
+!public/uploads/video/
+public/downloads/*
+!public/downloads/.gitkeep
+
+npm-debug.log*
+yarn-error.log*
+.DS_Store
