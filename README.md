@@ -29,6 +29,18 @@
 
 ---
 
+## 📸 界面预览
+
+<div align="center">
+
+<img src="docs/images/workbench.png" width="49%" alt="工作台" />
+<img src="docs/images/admin.png" width="49%" alt="管理员列表" />
+
+<img src="docs/images/material.png" width="49%" alt="素材中心" />
+<img src="docs/images/role.png" width="49%" alt="角色管理" />
+
+</div>
+
 ## ✨ 功能特性
 
 | | 模块 | 说明 |
@@ -122,6 +134,15 @@ npm run dev              # 默认 http://localhost:5173
 当前覆盖框架层（布局、登录页、错误页、公共组件、通用提示）；业务页面文案保持中文，
 可按 `src/locales/lang/{zh-cn,en}/` 下的同名命名空间增量补齐。
 
+<div align="center">
+
+<img src="docs/images/login.jpg" width="45%" alt="简体中文" />
+<img src="docs/images/login-en.jpg" width="45%" alt="English" />
+
+<sub>同一登录页：简体中文 / English</sub>
+
+</div>
+
 ## 🔌 接口约定
 
 所有接口挂在 `/api` 下，**业务失败也返回 HTTP 200**，前端只按响应体的 `code` 分支处理：
@@ -185,7 +206,7 @@ npm run build
 
 ## 📄 开源协议
 
-基于 [MIT](https://opensource.org/licenses/MIT) 协议开源。
+基于 [MIT](LICENSE) 协议开源。
 
 <div align="center">
 

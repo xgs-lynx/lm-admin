@@ -29,6 +29,18 @@ Permissions · Organization · Dictionaries · Media Library · WeChat Channels 
 
 ---
 
+## 📸 Screenshots
+
+<div align="center">
+
+<img src="docs/images/workbench.png" width="49%" alt="Workbench" />
+<img src="docs/images/admin.png" width="49%" alt="Admin list" />
+
+<img src="docs/images/material.png" width="49%" alt="Media center" />
+<img src="docs/images/role.png" width="49%" alt="Role management" />
+
+</div>
+
 ## ✨ Features
 
 | | Module | Description |
@@ -122,6 +134,15 @@ The switcher sits at the top-right of the login page and in the header user drop
 It currently covers the framework layer (layout, login page, error pages, shared components, common messages).
 Business pages still use Chinese copy; extend the matching namespace under `src/locales/lang/{zh-cn,en}/` to translate them incrementally.
 
+<div align="center">
+
+<img src="docs/images/login.jpg" width="45%" alt="Simplified Chinese" />
+<img src="docs/images/login-en.jpg" width="45%" alt="English" />
+
+<sub>The same login page: Simplified Chinese / English</sub>
+
+</div>
+
 ## 🔌 API Contract
 
 All endpoints live under `/api`. **Business failures still return HTTP 200** — the frontend branches on the `code` field only:
@@ -186,7 +207,7 @@ non-super-admin requests always get a 403 (alternatively, whitelist it via `notL
 
 ## 📄 License
 
-Released under the [MIT](https://opensource.org/licenses/MIT) license.
+Released under the [MIT](LICENSE) license.
 
 <div align="center">
 
