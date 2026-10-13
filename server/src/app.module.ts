@@ -5,10 +5,12 @@ import { DatabaseModule } from './database.module';
 import { RedisModule } from './redis/redis.module';
 import { ALL_MODELS } from './models';
 import { AuthMiddleware } from './common/auth/auth.middleware';
+import { ClientAuthMiddleware } from './common/auth/client-auth.middleware';
 import { SystemModule } from './modules/system/system.module';
 import { CommonModule } from './modules/common/common.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { MonitorModule } from './modules/monitor/monitor.module';
+import { ClientModule } from './modules/client/client.module';
 
 @Module({
   imports: [
@@ -38,12 +40,17 @@ import { MonitorModule } from './modules/monitor/monitor.module';
     CommonModule,
     SettingModule,
     MonitorModule,
+    ClientModule,
   ],
-  providers: [AuthMiddleware],
+  providers: [AuthMiddleware, ClientAuthMiddleware],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // token 认证 + 权限校验中间件（内部只作用于 /api 路由）
+    // 后台 token 认证 + 权限校验（内部只作用于 /api/，且对 /api/client/ 提前放行）
     consumer.apply(AuthMiddleware).forRoutes('*');
+    // C 端 token 认证（内部只作用于 /api/client/）。
+    // 顺序硬要求：必须排在 AuthMiddleware 之后 —— RequestContext（AsyncLocalStorage）
+    // 由 AuthMiddleware 建立，反序会让下游控制器读不到 clientSession。
+    consumer.apply(ClientAuthMiddleware).forRoutes('*');
   }
 }

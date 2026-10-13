@@ -1,6 +1,10 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'lm_decorate_tabbar' })
+@Table({
+  tableName: 'lm_decorate_tabbar',
+  createdAt: false,
+  updatedAt: false,
+})
 export class DecorateTabbar extends Model<DecorateTabbar> {
   @Column({ type: DataType.INTEGER.UNSIGNED, autoIncrement: true, allowNull: false, primaryKey: true })
   id: number;

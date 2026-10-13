@@ -19,6 +19,7 @@ const {
   reqUsernameKey,
   reqNicknameKey,
   superAdminId,
+  clientUriPrefix,
 } = config;
 
 function reject(code: number, message: string) {
@@ -48,6 +49,14 @@ export class AuthMiddleware implements NestMiddleware {
     // 只拦截 /api 接口，静态资源等直接放行
     const pathname = String(req.originalUrl || req.url || '').split('?')[0];
     if (!pathname.startsWith('/api/')) {
+      return;
+    }
+
+    // C 端接口（/api/client/*）由 ClientAuthMiddleware 独立鉴权。
+    // 必须放在下面转权限串之前：否则 /api/client/user/login 会被转成 client:user:login，
+    // 先撞 backstage:token 校验（必然 332/333）。提前 return 还能省掉本中间件后续
+    // 每请求一次的 cacheRoleMenusByRoleId（两次 DB 查询）。
+    if (pathname.startsWith(clientUriPrefix)) {
       return;
     }
 

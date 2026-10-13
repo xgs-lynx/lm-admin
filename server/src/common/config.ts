@@ -46,6 +46,21 @@ const rsa = {
     'article:cate:all', // 所有文章分类
   ],
 
+  // ===== C 端（/api/client/*，面向 web / uniapp / flutter 等客户端）=====
+  // C 端接口前缀。AuthMiddleware 据此旁路，ClientAuthMiddleware 据此接管，
+  // 两处共用这一个常量，避免字面量不同步导致「C 端接口无鉴权裸奔」。
+  clientUriPrefix: '/api/client/',
+  // C 端免登录接口（完整路径精确匹配，便于审计）
+  clientNotLoginUri: ['/api/client/user/register', '/api/client/user/login'],
+  // C 端 token 缓存键（裸键：set/get/del/ttl/expire 不加前缀）
+  clientTokenKey: 'client:token:',
+  // C 端「用户 -> 其全部 token」集合（sSet/sGet 会自动加 redisPrefix，实际键为 Like:client:token:set:<uid>）
+  clientTokenSet: 'client:token:set:',
+  // C 端 token 有效期：30 天（C 端会话应明显长于后台的 2 小时）
+  clientTokenTtl: 60 * 60 * 24 * 30,
+  // 剩余不足 15 天时续签，把 Redis 写入摊薄到最多 15 天一次
+  clientTokenRenewBelow: 60 * 60 * 24 * 15,
+
   // 资源访问域名
   publicUrl: process.env.PUBLIC_URL || 'http://127.0.0.1:8001',
   // 资源访问前缀
@@ -71,4 +86,10 @@ export const {
   notLoginUri,
   notAuthUri,
   publicPrefix,
+  clientUriPrefix,
+  clientNotLoginUri,
+  clientTokenKey,
+  clientTokenSet,
+  clientTokenTtl,
+  clientTokenRenewBelow,
 } = rsa;

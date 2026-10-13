@@ -1,6 +1,10 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'lm_decorate_page' })
+@Table({
+  tableName: 'lm_decorate_page',
+  createdAt: false,
+  updatedAt: false,
+})
 export class DecoratePage extends Model<DecoratePage> {
   @Column({ type: DataType.INTEGER.UNSIGNED, autoIncrement: true, allowNull: false, primaryKey: true })
   id: number;

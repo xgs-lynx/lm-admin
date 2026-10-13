@@ -1,6 +1,10 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'lm_system_log_sms' })
+@Table({
+  tableName: 'lm_system_log_sms',
+  createdAt: false,
+  updatedAt: false,
+})
 export class SystemLogSms extends Model<SystemLogSms> {
   @Column({ type: DataType.INTEGER.UNSIGNED, autoIncrement: true, allowNull: false, primaryKey: true, comment: 'id' })
   id: number;

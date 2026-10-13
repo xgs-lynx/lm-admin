@@ -1,6 +1,10 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'lm_notice_setting' })
+@Table({
+  tableName: 'lm_notice_setting',
+  createdAt: false,
+  updatedAt: false,
+})
 export class NoticeSetting extends Model<NoticeSetting> {
   @Column({ type: DataType.INTEGER.UNSIGNED, autoIncrement: true, allowNull: false, primaryKey: true, comment: '场景编号' })
   id: number;

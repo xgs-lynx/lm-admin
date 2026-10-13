@@ -1,6 +1,10 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'lm_article_category' })
+@Table({
+  tableName: 'lm_article_category',
+  createdAt: false,
+  updatedAt: false,
+})
 export class ArticleCategory extends Model<ArticleCategory> {
   @Column({ type: DataType.INTEGER.UNSIGNED, autoIncrement: true, allowNull: false, primaryKey: true })
   id: number;

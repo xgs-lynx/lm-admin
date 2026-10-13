@@ -1,6 +1,10 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'lm_hot_search' })
+@Table({
+  tableName: 'lm_hot_search',
+  createdAt: false,
+  updatedAt: false,
+})
 export class HotSearch extends Model<HotSearch> {
   @Column({ type: DataType.INTEGER.UNSIGNED, autoIncrement: true, allowNull: false, primaryKey: true, comment: '主键' })
   id: number;

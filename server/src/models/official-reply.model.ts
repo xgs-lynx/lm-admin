@@ -1,6 +1,10 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'lm_official_reply' })
+@Table({
+  tableName: 'lm_official_reply',
+  createdAt: false,
+  updatedAt: false,
+})
 export class OfficialReply extends Model<OfficialReply> {
   @Column({ type: DataType.INTEGER.UNSIGNED, autoIncrement: true, allowNull: false, primaryKey: true, comment: '主键' })
   id: number;

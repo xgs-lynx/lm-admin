@@ -1,6 +1,10 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'lm_user' })
+@Table({
+  tableName: 'lm_user',
+  createdAt: false,
+  updatedAt: false,
+})
 export class User extends Model<User> {
   @Column({ type: DataType.INTEGER.UNSIGNED, autoIncrement: true, allowNull: false, primaryKey: true })
   id: number;
