@@ -8,22 +8,11 @@
                 <div>
                     <div class="flex leading-9">
                         <div class="w-20 flex-none">当前版本</div>
-                        <span> {{ workbenchData.version.version }}</span>
+                        <span>{{ workbenchData.version.version }}</span>
                     </div>
                     <div class="flex leading-9">
                         <div class="w-20 flex-none">基于框架</div>
-                        <span> {{ workbenchData.version.based }}</span>
-                    </div>
-                    <div class="flex leading-9">
-                        <div class="w-20 felx-none">获取渠道</div>
-                        <div>
-                            <a :href="workbenchData.version.channel.website" target="_blank">
-                                <el-button type="success" size="small">官网</el-button>
-                            </a>
-                            <a class="ml-3" href="https://gitee.com/likeadmin/likeadmin_go" target="_blank">
-                                <el-button type="danger" size="small">Gitee</el-button>
-                            </a>
-                        </div>
+                        <span>{{ workbenchData.version.based }}</span>
                     </div>
                 </div>
             </el-card>
@@ -75,8 +64,11 @@
                     <span>常用功能</span>
                 </template>
                 <div class="flex flex-wrap">
-                    <div v-for="item in workbenchData.menu" class="md:w-[12.5%] w-1/4 flex flex-col items-center"
-                        :key="item">
+                    <div
+                        v-for="item in workbenchData.menu"
+                        class="md:w-[12.5%] w-1/4 flex flex-col items-center"
+                        :key="item.name"
+                    >
                         <router-link :to="item.url" class="mb-3 flex flex-col items-center">
                             <img width="40" height="40" :src="item.image" />
                             <div class="mt-2">{{ item.name }}</div>
@@ -85,34 +77,18 @@
                 </div>
             </el-card>
         </div>
-        <div class="md:flex">
-            <el-card class="flex-1 !border-none md:mr-4 mb-4" shadow="never">
-                <template #header>
-                    <span>访问量趋势图</span>
-                </template>
-                <div>
-                    <v-charts style="height: 350px" :option="workbenchData.visitorOption" :autoresize="true" />
-                </div>
-            </el-card>
-            <el-card class="!border-none mb-4" shadow="never">
-                <template #header>
-                    <span>服务支持</span>
-                </template>
-                <div>
-                    <div v-for="(item, index) in workbenchData.support" :key="index">
-                        <div class="flex items-center pb-10 pt-10" :class="{
-                            'border-b border-br': index == 0
-                        }">
-                            <img width="120" height="120" class="flex-none" :src="item.image" />
-                            <div class="ml-2">
-                                <div>{{ item.title }}</div>
-                                <div class="text-tx-regular text-xs mt-4">{{ item.desc }}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </el-card>
-        </div>
+        <el-card class="!border-none mb-4" shadow="never">
+            <template #header>
+                <span>访问量趋势图</span>
+            </template>
+            <div>
+                <v-charts
+                    style="height: 350px"
+                    :option="workbenchData.visitorOption"
+                    :autoresize="true"
+                />
+            </div>
+        </el-card>
     </div>
 </template>
 
@@ -126,31 +102,12 @@ import menu_dict from './image/menu_dict.png'
 import menu_file from './image/menu_file.png'
 import menu_auth from './image/menu_auth.png'
 import menu_web from './image/menu_web.png'
-import qq_group from './image/qq_group.png'
-import customer_service from './image/customer_service.png'
 // 表单数据
 const workbenchData: any = reactive({
     version: {
         version: '', // 版本号
-        website: '', // 官网
-        based: '',
-        channel: {
-            gitee: '',
-            website: ''
-        }
+        based: '' // 基于框架
     },
-    support: [
-        {
-            image: qq_group,
-            title: '扫码进入QQ交流群',
-            desc: '疑难疑点 进入QQ群'
-        },
-        {
-            image: customer_service,
-            title: '添加企业客服微信',
-            desc: '想了解更多请添加客服'
-        }
-    ],
     today: {}, // 今日数据
     menu: [
         {
@@ -189,8 +146,6 @@ const workbenchData: any = reactive({
             url: '/setting/website/information'
         }
     ], // 常用功能
-    visitor: [], // 访问量
-    article: [], // 文章阅读量
 
     visitorOption: {
         xAxis: {
@@ -226,7 +181,6 @@ const getData = async () => {
     const res = await getWorkbench()
     workbenchData.version = res.version
     workbenchData.today = res.today
-    workbenchData.visitor = res.visitor
 
     // 清空echarts 数据
     workbenchData.visitorOption.xAxis.data = []
