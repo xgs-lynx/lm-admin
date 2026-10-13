@@ -11,7 +11,7 @@
             >
                 <div>
                     <div class="flex justify-between">
-                        <div class="mb-3">请选择图标</div>
+                        <div class="mb-3">{{ $t('components.iconPicker.title') }}</div>
                         <div>
                             <span
                                 v-for="(item, index) in iconTabsMap"
@@ -44,7 +44,7 @@
                 <el-input
                     ref="inputRef"
                     v-model.trim="state.inputValue"
-                    placeholder="搜索图标"
+                    :placeholder="$t('components.iconPicker.searchPlaceholder')"
                     :autofocus="false"
                     :disabled="disabled"
                     @focus="handleFocus"
@@ -63,7 +63,7 @@
                             </el-tooltip>
                         </div>
 
-                        <template v-else>无</template>
+                        <template v-else>{{ $t('components.iconPicker.none') }}</template>
                     </template>
                     <template #append>
                         <el-button>
@@ -95,14 +95,16 @@ const emits = defineEmits<{
     (e: 'change', value: string): void
 }>()
 
+const { t } = useI18n()
+
 const tabIndex = ref(0)
 const iconTabsMap = [
     {
-        name: 'element图标',
+        name: t('components.iconPicker.elementIcons'),
         icons: getElementPlusIconNames()
     },
     {
-        name: '本地图标',
+        name: t('components.iconPicker.localIcons'),
         icons: getLocalIconNames()
     }
 ]

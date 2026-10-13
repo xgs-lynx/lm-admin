@@ -4,7 +4,7 @@
             v-model="showMenuDrawer"
             direction="ltr"
             :size="drawderSize"
-            title="主题设置"
+            :title="$t('layout.setting.title')"
             :with-header="false"
         >
             <side />

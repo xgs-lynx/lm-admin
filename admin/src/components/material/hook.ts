@@ -10,6 +10,7 @@ import {
 } from '@/api/file'
 import { usePaging } from '@/hooks/usePaging'
 import feedback from '@/utils/feedback'
+import { t } from '@/locales'
 import { ElMessage, ElTree, type CheckboxValueType } from 'element-plus'
 import { shallowRef, type Ref } from 'vue'
 
@@ -65,7 +66,7 @@ export function useCate(type: number) {
 
     // 删除分组
     const handleDeleteCate = async (id: number) => {
-        await feedback.confirm('确定要删除？')
+        await feedback.confirm(t('common.deleteConfirm'))
         await fileCateDelete({ id })
         cateId.value = ''
         getCateLists()
@@ -125,9 +126,7 @@ export function useFile(
     }
 
     const batchFileDelete = async (id?: number[]) => {
-        await feedback.confirm(
-            '确认删除后，本地或云存储文件也将同步删除，如文件已被使用，请谨慎操作！'
-        )
+        await feedback.confirm(t('components.material.deleteTips'))
         const ids = id ? id : select.value.map((item: any) => item.id)
         await fileDelete({ ids })
         getFileList()
@@ -154,7 +153,7 @@ export function useFile(
                 select.value.push(item)
                 return
             }
-            ElMessage.warning('已达到选择上限')
+            ElMessage.warning(t('components.material.selectLimit'))
             return
         }
         select.value.push(item)

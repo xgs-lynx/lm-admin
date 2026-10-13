@@ -4,7 +4,7 @@
             ref="popupRef"
             width="830px"
             custom-class="body-padding"
-            :title="`选择${tipsText}`"
+            :title="$t('components.material.pickerTitle', { type: tipsText })"
             @confirm="handleConfirm"
             @close="handleClose"
         >
@@ -28,9 +28,11 @@
                                     ></file-item>
                                 </del-wrap>
                                 <div class="operation-btns text-xs text-center">
-                                    <span>修改</span>
+                                    <span>{{ $t('common.modify') }}</span>
                                     |
-                                    <span @click.stop="handlePreview(element)">查看</span>
+                                    <span @click.stop="handlePreview(element)">
+                                        {{ $t('common.view') }}
+                                    </span>
                                 </div>
                             </div>
                         </template>
@@ -54,7 +56,7 @@
                                 }"
                             >
                                 <icon :size="25" name="el-icon-Plus" />
-                                <span>添加</span>
+                                <span>{{ $t('common.add') }}</span>
                             </div>
                         </slot>
                     </div>
@@ -83,6 +85,7 @@ import FileItem from './file.vue'
 import Material from './index.vue'
 import Preview from './preview.vue'
 import useAppStore from '@/stores/modules/app'
+import { t } from '@/locales'
 import { useThrottleFn } from '@vueuse/shared'
 export default defineComponent({
     components: {
@@ -153,9 +156,9 @@ export default defineComponent({
         const tipsText = computed(() => {
             switch (props.type) {
                 case 'image':
-                    return '图片'
+                    return t('components.material.typeImage')
                 case 'video':
-                    return '视频'
+                    return t('components.material.typeVideo')
                 default:
                     return ''
             }

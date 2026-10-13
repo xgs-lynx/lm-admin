@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { useDark, useWindowSize, useThrottleFn } from "@vueuse/core";
-import zhCn from "element-plus/lib/locale/lang/zh-cn";
+import { DEFAULT_LOCALE, elementLocales, i18n } from "./locales";
 import useAppStore from "./stores/modules/app";
 import useSettingStore from "./stores/modules/setting";
 import { ScreenEnum } from "./enums/appEnums";
 const appStore = useAppStore();
 const settingStore = useSettingStore();
-const elConfig = {
+const elConfig = computed(() => ({
   zIndex: 3000,
-  locale: zhCn,
-};
+  locale: elementLocales[i18n.global.locale.value] ?? elementLocales[DEFAULT_LOCALE],
+}));
 const isDark = useDark();
 onMounted(async () => {
   //设置主题色

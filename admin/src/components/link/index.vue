@@ -32,14 +32,16 @@ const emit = defineEmits<{
     (event: 'update:modelValue', value: any): void
 }>()
 
+const { t } = useI18n()
+
 const menus = ref([
     {
-        name: '商城页面',
+        name: t('components.link.shopPages'),
         type: LinkTypeEnum.SHOP_PAGES,
         link: {}
     },
     {
-        name: '自定义链接',
+        name: t('components.link.customLink'),
         type: LinkTypeEnum.CUSTOM_LINK,
         link: {}
     }

@@ -378,6 +378,27 @@
   resolved "https://registry.npmmirror.com/@humanwhocodes/object-schema/-/object-schema-2.0.2.tgz"
   integrity sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==
 
+"@intlify/core-base@9.14.5":
+  version "9.14.5"
+  resolved "https://registry.npmmirror.com/@intlify/core-base/-/core-base-9.14.5.tgz"
+  integrity sha512-5ah5FqZG4pOoHjkvs8mjtv+gPKYU0zCISaYNjBNNqYiaITxW8ZtVih3GS/oTOqN8d9/mDLyrjD46GBApNxmlsA==
+  dependencies:
+    "@intlify/message-compiler" "9.14.5"
+    "@intlify/shared" "9.14.5"
+
+"@intlify/message-compiler@9.14.5":
+  version "9.14.5"
+  resolved "https://registry.npmmirror.com/@intlify/message-compiler/-/message-compiler-9.14.5.tgz"
+  integrity sha512-IHzgEu61/YIpQV5Pc3aRWScDcnFKWvQA9kigcINcCBXN8mbW+vk9SK+lDxA6STzKQsVJxUPg9ACC52pKKo3SVQ==
+  dependencies:
+    "@intlify/shared" "9.14.5"
+    source-map-js "^1.0.2"
+
+"@intlify/shared@9.14.5":
+  version "9.14.5"
+  resolved "https://registry.npmmirror.com/@intlify/shared/-/shared-9.14.5.tgz"
+  integrity sha512-9gB+E53BYuAEMhbCAxVgG38EZrk59sxBtv3jSizNL2hEWlgjBjAw1AwpLHtNaeda12pe6W20OGEa0TwuMSRbyQ==
+
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
   resolved "https://registry.npmmirror.com/@isaacs/cliui/-/cliui-8.0.2.tgz"
@@ -4416,6 +4437,15 @@ vue-eslint-parser@^9.1.1, vue-eslint-parser@^9.4.0:
     esquery "^1.4.0"
     lodash "^4.17.21"
     semver "^7.3.6"
+
+vue-i18n@^9.14.5:
+  version "9.14.5"
+  resolved "https://registry.npmmirror.com/vue-i18n/-/vue-i18n-9.14.5.tgz"
+  integrity sha512-0jQ9Em3ymWngyiIkj0+c/k7WgaPO+TNzjKSNq9BvBQaKJECqn9cd9fL4tkDhB5G1QBskGl9YxxbDAhgbFtpe2g==
+  dependencies:
+    "@intlify/core-base" "9.14.5"
+    "@intlify/shared" "9.14.5"
+    "@vue/devtools-api" "^6.5.0"
 
 vue-router@^4.0.16:
   version "4.2.5"

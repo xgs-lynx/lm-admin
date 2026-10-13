@@ -15,6 +15,7 @@
 
 import type { RouteRecordRaw } from 'vue-router'
 import { PageEnum } from '@/enums/pageEnum'
+import { t } from '@/locales'
 import Layout from '@/layout/default/index.vue'
 
 export const LAYOUT = () => Promise.resolve(Layout)
@@ -43,7 +44,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
                 name: Symbol(),
                 component: () => import('@/views/user/setting.vue'),
                 meta: {
-                    title: '个人设置'
+                    title: t('route.userSetting')
                 }
             }
         ]

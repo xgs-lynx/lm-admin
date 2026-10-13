@@ -38,8 +38,10 @@
                     />
                 </div>
                 <div class="popover-input__btns flex-none">
-                    <el-button link @click="close">取消</el-button>
-                    <el-button type="primary" :size="size" @click="handleConfirm">确定</el-button>
+                    <el-button link @click="close">{{ $t('common.cancel') }}</el-button>
+                    <el-button type="primary" :size="size" @click="handleConfirm">
+                        {{ $t('common.confirm') }}
+                    </el-button>
                 </div>
             </div>
             <template #reference>

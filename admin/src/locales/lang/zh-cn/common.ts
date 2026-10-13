@@ -1,0 +1,23 @@
+export default {
+    appTitle: '后台管理系统',
+    tip: '系统提示',
+    warmTip: '温馨提示',
+    confirm: '确定',
+    cancel: '取消',
+    copySuccess: '复制成功',
+    copyFail: '复制失败',
+    defaultFileName: '文件名称.zip',
+    add: '添加',
+    modify: '修改',
+    view: '查看',
+    rename: '重命名',
+    delete: '删除',
+    clear: '清空',
+    move: '移动',
+    reset: '重置',
+    search: '搜索',
+    selectPlaceholder: '请选择',
+    noData: '暂无数据~',
+    operate: '操作',
+    deleteConfirm: '确定要删除？'
+}

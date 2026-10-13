@@ -1,6 +1,6 @@
 <template>
     <div class="error404">
-        <error code="404" title="哎呀，出错了！您访问的页面不存在…"></error>
+        <error code="404" :title="$t('error.notFound')"></error>
     </div>
 </template>
 

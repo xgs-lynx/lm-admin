@@ -5,8 +5,8 @@
         range-separator="-"
         format="YYYY-MM-DD"
         value-format="YYYY-MM-DD"
-        start-placeholder="开始时间"
-        end-placeholder="结束时间"
+        :start-placeholder="$t('components.dateRange.startPlaceholder')"
+        :end-placeholder="$t('components.dateRange.endPlaceholder')"
         clearable
     ></el-date-picker>
 </template>

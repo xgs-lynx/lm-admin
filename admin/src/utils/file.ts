@@ -1,8 +1,10 @@
+import { t } from '@/locales'
+
 /**
  * @description
  * @param file
  */
-export function streamFileDownload(file: any, fileName = '文件名称.zip') {
+export function streamFileDownload(file: any, fileName = t('common.defaultFileName')) {
     const blob = new Blob([file], { type: 'application/octet-stream;charset=UTF-8' })
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')

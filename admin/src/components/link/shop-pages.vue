@@ -11,7 +11,7 @@
                 :key="index"
                 @click="handleSelect(item)"
             >
-                {{ item.name }}
+                {{ getLabel(item.name) }}
             </div>
         </div>
     </div>
@@ -19,7 +19,14 @@
 
 <script lang="ts" setup>
 import type { PropType } from 'vue'
-import { LinkTypeEnum, type Link } from '.'
+import { LinkTypeEnum, shopPagesKeys, type Link } from '.'
+
+const { t } = useI18n()
+// 展示层翻译：name 字段本身仍是持久化的中文原值
+const getLabel = (name?: string) => {
+    const key = name ? shopPagesKeys[name] : ''
+    return key ? t(key) : name
+}
 
 defineProps({
     modelValue: {

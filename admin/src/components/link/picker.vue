@@ -1,6 +1,11 @@
 <template>
     <div class="link-picker flex-1" @click="!disabled && popupRef?.open()">
-        <el-input :model-value="getLink" placeholder="请选择链接" readonly :disabled="disabled">
+        <el-input
+            :model-value="getLink"
+            :placeholder="$t('components.link.selectPlaceholder')"
+            readonly
+            :disabled="disabled"
+        >
             <template #suffix>
                 <icon v-if="!modelValue?.path" name="el-icon-ArrowRight" />
                 <icon
@@ -10,16 +15,22 @@
                 />
             </template>
         </el-input>
-        <popup ref="popupRef" width="700px" title="链接选择" @confirm="handleConfirm">
+        <popup
+            ref="popupRef"
+            width="700px"
+            :title="$t('components.link.pickerTitle')"
+            @confirm="handleConfirm"
+        >
             <link-content v-model="activeLink" />
         </popup>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { LinkTypeEnum, type Link } from '.'
+import { LinkTypeEnum, shopPagesKeys, type Link } from '.'
 import LinkContent from './index.vue'
 import Popup from '@/components/popup/index.vue'
+const { t } = useI18n()
 const props = defineProps({
     modelValue: {
         type: Object
@@ -39,10 +50,16 @@ const handleConfirm = () => {
     emit('update:modelValue', activeLink.value)
 }
 
+// 商城页面仅翻译展示，数据里存的仍是中文名
+const getLabel = (name?: string) => {
+    const key = name ? shopPagesKeys[name] : ''
+    return key ? t(key) : name
+}
+
 const getLink = computed(() => {
     switch (props.modelValue?.type) {
         case LinkTypeEnum.SHOP_PAGES:
-            return props.modelValue.name
+            return getLabel(props.modelValue.name)
         case LinkTypeEnum.CUSTOM_LINK:
             return props.modelValue.query?.url
         default:

@@ -46,7 +46,9 @@
                                                 >
                                                     <div>
                                                         <el-dropdown-item>
-                                                            命名分组
+                                                            {{
+                                                                $t('components.material.renameCate')
+                                                            }}
                                                         </el-dropdown-item>
                                                     </div>
                                                 </popover-input>
@@ -54,7 +56,9 @@
                                                     v-perms="['common:album:cateDel']"
                                                     @click="handleDeleteCate(data.id)"
                                                 >
-                                                    <el-dropdown-item>删除分组</el-dropdown-item>
+                                                    <el-dropdown-item>
+                                                        {{ $t('components.material.deleteCate') }}
+                                                    </el-dropdown-item>
                                                 </div>
                                             </el-dropdown-menu>
                                         </template>
@@ -76,7 +80,7 @@
                     show-limit
                     teleported
                 >
-                    <el-button> 添加分组 </el-button>
+                    <el-button> {{ $t('components.material.addCate') }} </el-button>
                 </popover-input>
             </div>
         </div>
@@ -92,7 +96,9 @@
                         :show-progress="true"
                         @change="refresh"
                     >
-                        <el-button type="primary">本地上传</el-button>
+                        <el-button type="primary">{{
+                            $t('components.material.localUpload')
+                        }}</el-button>
                     </upload>
                     <upload
                         v-if="type == 'video'"
@@ -103,7 +109,9 @@
                         :show-progress="true"
                         @change="refresh"
                     >
-                        <el-button type="primary">本地上传</el-button>
+                        <el-button type="primary">{{
+                            $t('components.material.localUpload')
+                        }}</el-button>
                     </upload>
                     <el-button
                         v-perms="['common:album:albumDel']"
@@ -111,7 +119,7 @@
                         :disabled="!select.length"
                         @click.stop="batchFileDelete()"
                     >
-                        删除
+                        {{ $t('common.delete') }}
                     </el-button>
 
                     <popup
@@ -120,15 +128,20 @@
                         class="ml-3"
                         @confirm="batchFileMove"
                         :disabled="!select.length"
-                        title="移动文件"
+                        :title="$t('components.material.moveTitle')"
                     >
                         <template #trigger>
-                            <el-button :disabled="!select.length">移动</el-button>
+                            <el-button :disabled="!select.length">{{
+                                $t('common.move')
+                            }}</el-button>
                         </template>
 
                         <div>
-                            <span class="mr-5">移动文件至</span>
-                            <el-select v-model="moveId" placeholder="请选择">
+                            <span class="mr-5">{{ $t('components.material.moveTo') }}</span>
+                            <el-select
+                                v-model="moveId"
+                                :placeholder="$t('common.selectPlaceholder')"
+                            >
                                 <template v-for="item in cateLists" :key="item.id">
                                     <el-option
                                         v-if="item.id !== ''"
@@ -142,7 +155,7 @@
                 </div>
                 <el-input
                     class="w-60"
-                    placeholder="请输入名称"
+                    :placeholder="$t('components.material.namePlaceholder')"
                     v-model="fileParams.name"
                     @keyup.enter="refresh"
                 >
@@ -155,7 +168,7 @@
                     </template>
                 </el-input>
                 <div class="flex items-center ml-2">
-                    <el-tooltip content="列表视图" placement="top">
+                    <el-tooltip :content="$t('components.material.listView')" placement="top">
                         <div
                             class="list-icon"
                             :class="{
@@ -166,7 +179,7 @@
                             <icon name="local-icon-list-2" :size="18" />
                         </div>
                     </el-tooltip>
-                    <el-tooltip content="平铺视图" placement="top">
+                    <el-tooltip :content="$t('components.material.gridView')" placement="top">
                         <div
                             class="list-icon"
                             :class="{
@@ -186,7 +199,7 @@
                     @change="selectAll"
                     :indeterminate="isIndeterminate"
                 >
-                    当页全选
+                    {{ $t('components.material.selectAllPage') }}
                 </el-checkbox>
             </div>
             <div class="material-center__content flex flex-col flex-1 mb-1 min-h-0">
@@ -223,10 +236,12 @@
                                     show-limit
                                     teleported
                                 >
-                                    <el-button type="primary" link> 重命名 </el-button>
+                                    <el-button type="primary" link>
+                                        {{ $t('common.rename') }}
+                                    </el-button>
                                 </popover-input>
                                 <el-button type="primary" link @click="handlePreview(item.uri)">
-                                    查看
+                                    {{ $t('common.view') }}
                                 </el-button>
                             </div>
                         </li>
@@ -248,20 +263,28 @@
                             <el-checkbox :modelValue="isSelect(row.id)" @change="selectFile(row)" />
                         </template>
                     </el-table-column>
-                    <el-table-column label="图片" width="100">
+                    <el-table-column :label="$t('components.material.image')" width="100">
                         <template #default="{ row }">
                             <file-item :uri="row.uri" file-size="50px" :type="type"></file-item>
                         </template>
                     </el-table-column>
-                    <el-table-column label="名称" min-width="100" show-overflow-tooltip>
+                    <el-table-column
+                        :label="$t('components.material.name')"
+                        min-width="100"
+                        show-overflow-tooltip
+                    >
                         <template #default="{ row }">
                             <el-link @click.stop="handlePreview(row.uri)" :underline="false">
                                 {{ row.name }}
                             </el-link>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="createTime" label="上传时间" min-width="100" />
-                    <el-table-column label="操作" width="150" fixed="right">
+                    <el-table-column
+                        prop="createTime"
+                        :label="$t('components.material.uploadTime')"
+                        min-width="100"
+                    />
+                    <el-table-column :label="$t('common.operate')" width="150" fixed="right">
                         <template #default="{ row }">
                             <div class="inline-block" v-perms="['common:album:albumRename']">
                                 <popover-input
@@ -273,12 +296,14 @@
                                     show-limit
                                     teleported
                                 >
-                                    <el-button type="primary" link> 重命名 </el-button>
+                                    <el-button type="primary" link>
+                                        {{ $t('common.rename') }}
+                                    </el-button>
                                 </popover-input>
                             </div>
                             <div class="inline-block">
                                 <el-button type="primary" link @click.stop="handlePreview(row.uri)">
-                                    查看
+                                    {{ $t('common.view') }}
                                 </el-button>
                             </div>
                             <div class="inline-block" v-perms="['common:album:albumDel']">
@@ -287,7 +312,7 @@
                                     link
                                     @click.stop="batchFileDelete([row.id])"
                                 >
-                                    删除
+                                    {{ $t('common.delete') }}
                                 </el-button>
                             </div>
                         </template>
@@ -298,7 +323,7 @@
                     class="flex flex-1 justify-center items-center"
                     v-if="!pager.loading && !pager.lists.length"
                 >
-                    暂无数据~
+                    {{ $t('common.noData') }}
                 </div>
             </div>
             <div class="material-center__footer flex justify-between items-center mt-2">
@@ -311,7 +336,7 @@
                                 @change="selectAll"
                                 :indeterminate="isIndeterminate"
                             >
-                                当页全选
+                                {{ $t('components.material.selectAllPage') }}
                             </el-checkbox>
                         </span>
                         <el-button
@@ -319,22 +344,27 @@
                             :disabled="!select.length"
                             @click="batchFileDelete()"
                         >
-                            删除
+                            {{ $t('common.delete') }}
                         </el-button>
                         <popup
                             v-perms="['common:album:albumMove']"
                             class="ml-3 inline"
                             @confirm="batchFileMove"
                             :disabled="!select.length"
-                            title="移动文件"
+                            :title="$t('components.material.moveTitle')"
                         >
                             <template #trigger>
-                                <el-button :disabled="!select.length">移动</el-button>
+                                <el-button :disabled="!select.length">{{
+                                    $t('common.move')
+                                }}</el-button>
                             </template>
 
                             <div>
-                                <span class="mr-5">移动文件至</span>
-                                <el-select v-model="moveId" placeholder="请选择">
+                                <span class="mr-5">{{ $t('components.material.moveTo') }}</span>
+                                <el-select
+                                    v-model="moveId"
+                                    :placeholder="$t('common.selectPlaceholder')"
+                                >
                                     <template v-for="item in cateLists" :key="item.id">
                                         <el-option
                                             v-if="item.id !== ''"
@@ -357,10 +387,12 @@
         <div class="material__right" v-if="mode == 'picker'">
             <div class="flex justify-between p-2 flex-wrap">
                 <div class="sm flex items-center">
-                    已选择 {{ select.length }}
+                    {{ $t('components.material.selected') }} {{ select.length }}
                     <span v-if="limit">/{{ limit }}</span>
                 </div>
-                <el-button type="primary" link @click="clearSelect">清空</el-button>
+                <el-button type="primary" link @click="clearSelect">
+                    {{ $t('common.clear') }}
+                </el-button>
             </div>
             <div class="flex-1 min-h-0">
                 <el-scrollbar class="ls-scrollbar">

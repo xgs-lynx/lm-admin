@@ -25,10 +25,15 @@
 <script setup lang="ts">
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { Editor as WEditor, Toolbar } from '@wangeditor/editor-for-vue'
+import { i18nChangeLanguage } from '@wangeditor/editor'
 import type { IEditorConfig, IToolbarConfig } from '@wangeditor/editor'
 import MaterialPicker from '@/components/material/picker.vue'
 import { addUnit } from '@/utils/util'
+import { i18n } from '@/locales'
 import type { CSSProperties } from 'vue'
+
+// 编辑器内置中英文语言包，跟随系统语言切换
+i18nChangeLanguage(i18n.global.locale.value === 'en' ? 'en' : 'zh-CN')
 
 const props = withDefaults(
     defineProps<{

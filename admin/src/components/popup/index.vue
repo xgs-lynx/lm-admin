@@ -38,6 +38,7 @@
 </template>
 
 <script lang="ts">
+import { t } from '@/locales'
 export default defineComponent({
     props: {
         title: {
@@ -53,12 +54,13 @@ export default defineComponent({
         confirmButtonText: {
             // 确认按钮内容
             type: [String, Boolean],
-            default: '确定'
+            // 工厂函数，按实例取值以跟随当前语言
+            default: () => t('common.confirm')
         },
         cancelButtonText: {
             // 取消按钮内容
             type: [String, Boolean],
-            default: '取消'
+            default: () => t('common.cancel')
         },
         width: {
             // 弹窗的宽度

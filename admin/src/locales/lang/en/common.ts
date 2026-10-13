@@ -1,0 +1,23 @@
+export default {
+    appTitle: 'Admin System',
+    tip: 'Notice',
+    warmTip: 'Tips',
+    confirm: 'OK',
+    cancel: 'Cancel',
+    copySuccess: 'Copied successfully',
+    copyFail: 'Copy failed',
+    defaultFileName: 'file.zip',
+    add: 'Add',
+    modify: 'Change',
+    view: 'View',
+    rename: 'Rename',
+    delete: 'Delete',
+    clear: 'Clear',
+    move: 'Move',
+    reset: 'Reset',
+    search: 'Search',
+    selectPlaceholder: 'Please select',
+    noData: 'No data~',
+    operate: 'Actions',
+    deleteConfirm: 'Are you sure you want to delete it?'
+}

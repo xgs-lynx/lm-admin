@@ -1,5 +1,10 @@
 <template>
-    <div class="login flex flex-col">
+    <div class="login flex flex-col relative">
+        <div class="absolute top-6 right-6 z-10">
+            <lang-select
+                class="lang-select rounded-full border border-br bg-body px-3 py-1.5 text-tx-primary shadow-light hover:border-primary hover:text-primary"
+            />
+        </div>
         <div class="flex-1 flex items-center justify-center">
             <div class="login-card flex rounded-md">
                 <div class="flex-1 h-full hidden md:inline-block">
@@ -13,7 +18,7 @@
                         <el-form-item prop="account">
                             <el-input
                                 v-model.trim="formData.account"
-                                placeholder="请输入账号"
+                                :placeholder="$t('login.accountPlaceholder')"
                                 @keyup.enter="handleEnter"
                             >
                                 <template #prepend>
@@ -26,7 +31,7 @@
                                 ref="passwordRef"
                                 v-model="formData.password"
                                 show-password
-                                placeholder="请输入密码"
+                                :placeholder="$t('login.passwordPlaceholder')"
                                 @keyup.enter="handleLogin"
                             >
                                 <template #prepend>
@@ -36,10 +41,13 @@
                         </el-form-item>
                     </el-form>
                     <div class="mb-5">
-                        <el-checkbox v-model="remAccount" label="记住账号"></el-checkbox>
+                        <el-checkbox
+                            v-model="remAccount"
+                            :label="$t('login.rememberAccount')"
+                        ></el-checkbox>
                     </div>
                     <el-button type="primary" size="large" :loading="isLock" @click="lockLogin">
-                        登录
+                        {{ $t('login.loginBtn') }}
                     </el-button>
                 </div>
             </div>
@@ -50,6 +58,7 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, reactive, ref, shallowRef } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { InputInstance, FormInstance } from 'element-plus'
 import LayoutFooter from '@/layout/components/footer.vue'
 import useAppStore from '@/stores/modules/app'
@@ -58,6 +67,7 @@ import cache from '@/utils/cache'
 import { ACCOUNT_KEY } from '@/enums/cacheEnums'
 import { PageEnum } from '@/enums/pageEnum'
 import { useLockFn } from '@/hooks/useLockFn'
+const { t } = useI18n()
 const passwordRef = shallowRef<InputInstance>()
 const formRef = shallowRef<FormInstance>()
 const appStore = useAppStore()
@@ -74,14 +84,14 @@ const rules = {
     account: [
         {
             required: true,
-            message: '请输入账号',
+            message: t('login.accountPlaceholder'),
             trigger: ['blur']
         }
     ],
     password: [
         {
             required: true,
-            message: '请输入密码',
+            message: t('login.passwordPlaceholder'),
             trigger: ['blur']
         }
     ]

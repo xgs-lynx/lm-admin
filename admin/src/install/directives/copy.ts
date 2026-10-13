@@ -5,6 +5,7 @@
  */
 
 import feedback from '@/utils/feedback'
+import { t } from '@/locales'
 import useClipboard from 'vue-clipboard3'
 const clipboard = 'data-clipboard-text'
 export default {
@@ -15,10 +16,10 @@ export default {
         el.onclick = () => {
             toClipboard(el.getAttribute(clipboard)!)
                 .then(() => {
-                    feedback.msgSuccess('复制成功')
+                    feedback.msgSuccess(t('common.copySuccess'))
                 })
                 .catch(() => {
-                    feedback.msgError('复制失败')
+                    feedback.msgError(t('common.copyFail'))
                 })
         }
     },

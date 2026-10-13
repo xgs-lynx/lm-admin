@@ -6,7 +6,7 @@
             </slot>
             <div class="text-lg text-tx-secondary mt-7 mb-7">{{ title }}</div>
             <el-button v-if="showBtn" type="primary" @click="router.go(-1)">
-                {{ second }} 秒后返回上一页
+                {{ $t('error.backTip', { second }) }}
             </el-button>
         </div>
     </div>

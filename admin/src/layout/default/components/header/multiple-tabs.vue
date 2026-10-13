@@ -18,9 +18,15 @@
             </span>
             <template #dropdown>
                 <el-dropdown-menu>
-                    <el-dropdown-item command="closeCurrent"> 关闭当前 </el-dropdown-item>
-                    <el-dropdown-item command="closeOther"> 关闭其他 </el-dropdown-item>
-                    <el-dropdown-item command="closeAll"> 关闭全部 </el-dropdown-item>
+                    <el-dropdown-item command="closeCurrent">
+                        {{ $t('layout.tabs.closeCurrent') }}
+                    </el-dropdown-item>
+                    <el-dropdown-item command="closeOther">
+                        {{ $t('layout.tabs.closeOther') }}
+                    </el-dropdown-item>
+                    <el-dropdown-item command="closeAll">
+                        {{ $t('layout.tabs.closeAll') }}
+                    </el-dropdown-item>
                 </el-dropdown-menu>
             </template>
         </el-dropdown>

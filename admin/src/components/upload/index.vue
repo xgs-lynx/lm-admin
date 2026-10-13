@@ -19,7 +19,7 @@
         <el-dialog
             v-if="showProgress && fileList.length"
             v-model="visible"
-            title="上传进度"
+            :title="$t('components.upload.title')"
             :close-on-click-modal="false"
             width="500px"
             :modal="false"
@@ -44,6 +44,7 @@ import { computed, defineComponent, ref, shallowRef } from 'vue'
 import useUserStore from '@/stores/modules/user'
 import config from '@/config'
 import feedback from '@/utils/feedback'
+import { t } from '@/locales'
 import type { ElUpload } from 'element-plus'
 import { RequestCodeEnum } from '@/enums/requestEnums'
 export default defineComponent({
@@ -104,14 +105,14 @@ export default defineComponent({
             }
         }
         const handleError = (event: any, file: any) => {
-            feedback.msgError(`${file.name}文件上传失败`)
+            feedback.msgError(t('components.upload.fail', { name: file.name }))
             uploadRefs.value?.abort(file)
             visible.value = false
             emit('change')
             emit('error')
         }
         const handleExceed = () => {
-            feedback.msgError(`超出上传上限${props.limit}，请重新上传`)
+            feedback.msgError(t('components.upload.exceed', { limit: props.limit }))
         }
         const handleClose = () => {
             uploadRefs.value?.clearFiles()
