@@ -10,6 +10,8 @@ import * as util from '../../../common/utils';
 import urlUtil from '../../../common/utils/url.util';
 import { getRequestContext } from '../../../common/request-context';
 import { BusinessException } from '../../../common/exceptions/business.exception';
+import { ENGINE_QINIU, getStorageRuntime } from '../../../common/storage-context';
+import { uploadBufferToQiniu } from '../../../common/utils/qiniu.util';
 import { Album } from '../../../models/album.model';
 import { AlbumCate } from '../../../models/album-cate.model';
 
@@ -171,15 +173,12 @@ export class AlbumService {
 
     const albumResps = albums.map(album => album.toJSON());
 
-    const engine = 'local';
-
+    // uri  = 完整可显示地址（素材缩略图、富文本插入、选择器默认值都用它）
+    // path = 无域名的相对标识（装修 JSON 存它，显示侧用 `${ossDomain}${path}` 补前缀）
     for (let i = 0; i < albumResps.length; i++) {
-      if (engine === 'local') {
-        (albumResps[i] as any).path = albums[i].uri;
-      } else {
-        // TODO: 其他 engine
-      }
-      (albumResps[i] as any).uri = urlUtil.toAbsoluteUrl(albums[i].uri);
+      const absoluteUrl = urlUtil.toAbsoluteUrl(albums[i].uri);
+      (albumResps[i] as any).uri = absoluteUrl;
+      (albumResps[i] as any).path = urlUtil.toRelativeUrl(absoluteUrl);
       (albumResps[i] as any).size = util.getFmtSize(albums[i].size);
     }
 
@@ -294,9 +293,12 @@ export class AlbumService {
 
       const albumId = await this.albumAdd(addReq);
 
+      const absoluteUrl = urlUtil.toAbsoluteUrl(url);
+
       return {
         id: albumId,
-        path: urlUtil.toAbsoluteUrl(url),
+        uri: absoluteUrl,
+        path: urlUtil.toRelativeUrl(absoluteUrl),
       };
     } catch (err) {
       if (err instanceof BusinessException) {
@@ -306,12 +308,21 @@ export class AlbumService {
     }
   }
 
+  /** 按当前生效引擎保存上传文件 */
+  async handleUploadFile(file: UploadFileInput, type = 10) {
+    const { engine } = getStorageRuntime();
+    if (engine === ENGINE_QINIU) {
+      return this.handleUploadFileToQiniu(file, type);
+    }
+    return this.handleUploadFileToLocal(file, type);
+  }
+
   /**
-   * 保存上传文件。
+   * 写入本地磁盘。
    * 原实现写入 <baseDir>/app/public/uploads/{image|video}/YYYY-MM-DD/，
    * 这里写入 <项目根>/public/uploads/{image|video}/YYYY-MM-DD/，对外 URL 保持一致。
    */
-  async handleUploadFile(file: UploadFileInput, type = 10) {
+  private async handleUploadFileToLocal(file: UploadFileInput, type = 10) {
     const pathDir = type === 10 ? '/public/uploads/image/' : '/public/uploads/video/';
     const targetDir = pathDir + dayjs().format('YYYY-MM-DD');
     const dir = path.join(projectRoot, targetDir);
@@ -326,6 +337,29 @@ export class AlbumService {
 
     return {
       url: `${targetDir}/${filename}`,
+      fileName: fitFileName(file.originalname),
+      size: file.size,
+    };
+  }
+
+  /**
+   * 上传到七牛云，返回对象的 key 作为 uri。
+   *
+   * key 的三条约束：
+   *  1) 不能以 '/' 开头、不能包含 'public/uploads/' —— 否则会被 url.util 当成本地路径解析；
+   *  2) lm_album.uri 是 varchar(200)，此 key 约 60 字符，安全；
+   *  3) 用 uuid 而非 Date.now()：前端一次最多选 10 个文件并发上传，时间戳会撞名，
+   *     而七牛同名 key 默认覆盖，比本地磁盘更难恢复。
+   */
+  private async handleUploadFileToQiniu(file: UploadFileInput, type = 10) {
+    const dir = type === 10 ? 'image' : 'video';
+    const ext = path.extname(file.originalname).toLocaleLowerCase();
+    const key = `${dir}/${dayjs().format('YYYY-MM-DD')}/${util.makeUuid()}${ext}`;
+
+    await uploadBufferToQiniu(key, file.buffer, fitFileName(file.originalname));
+
+    return {
+      url: key,
       fileName: fitFileName(file.originalname),
       size: file.size,
     };

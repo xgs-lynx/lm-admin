@@ -89,6 +89,38 @@ public/                         静态资源（/public 前缀）与上传目录
 | `authAdmin.adminList` | `adminResp[i].dept.name` 在部门为空时抛错，导致整个列表 500 | 空值返回 `''` | — |
 | 上传原始文件名过长 | 原样写入 `lm_album.name`（`varchar(100)`），文件名超过 100 字符即 `Data too long for column 'name'`，上传整体失败 | 按 100 字符截断并保留扩展名 | `name` 列长度由导入的 SQL 决定，不擅自改表结构 |
 | 上传失败原因 | 被 catch 成一句 `AlbumAdd Create err`，数据库真实报错完全丢失 | 真实错误写入服务端日志，对外提示不变 | 否则此类问题无法排查 |
+| `storageService.edit` 的 status 语义 | `status===1` 时置 `default=alias`，否则**无条件**置 `default=''` | 仅当 `default===alias` 时才清空 | 只有本地存储时该缺陷不显形；接入第二个引擎后，七牛云生效时打开「本地存储」弹窗（status 回填为 0）直接保存会把两个引擎全关掉 |
+| `storageService` 的引擎支持 | 硬编码 `const engine = 'local'`，`list` 只返回本地一行，其余 alias 一律抛 `engine:xxx 暂时不支持`（且被 catch 成一句 `Edit Set default err`） | 支持 `local` / `qiniu`，错误提示可读 | 同上 |
+| `urlUtil.toRelativeUrl` 入参 | 无条件 `new URL(u)`，传入相对值抛 `Invalid URL` 打断保存流程 | 非绝对地址原样返回 | 七牛云下存的就是对象 key，是相对标识 |
+| `urlUtil.toAbsoluteUrl` 入参 | 已是完整 URL 时仍按相对路径拼接，得到 `http://host/http:/x` 这类坏值 | 绝对地址直通 | 同上 |
+
+### 存储引擎
+
+支持 **本地存储** 与 **七牛云存储**，在「系统设置 → 存储设置」切换。当前生效引擎记录在
+`lm_system_config`（`type='storage'`, `name='default'`），各引擎配置存在同表的同名行里。
+
+**本地存储是系统兜底，不可关闭**：它不参与 `default` 的竞争，`default` 为空或 `'local'`
+都表示「未启用任何云存储」，此时走本地存储。因此：
+
+- 任何时刻**至多只有一行显示「开启」** —— 没有云存储启用时是本地存储，启用云存储后是那个云存储，
+  本地存储随之显示「关闭」；
+- 想从云存储切回本地，请**把云存储关掉**，而不是去"开启本地存储"（本地存储的配置弹窗里状态单选是置灰的，
+  保存它的配置不会影响 `default`）；
+- 本地存储的 `status` 由当前生效引擎推导而来，不接受直接修改：`storage/change` 关闭本地存储会被明确拒绝。
+
+引擎信息由 `common/storage-context.ts` 维护为**进程内快照**，由 `StorageService.onModuleInit`
+在启动时、以及每次保存配置后刷新。`url.util.ts` 等同步读取该快照，因此：
+
+- **修改配置立即生效**，无需重启；
+- 直接手改数据库或**多进程部署**时，其他进程需重启才能感知；
+- `default` 指向未实现的引擎（`aliyun` / `qcloud`）、或七牛云配置不完整时，一律**回落本地存储**并打 `warn`。
+
+七牛云上传的注意点：
+
+- 空间域名必须带 `http://` 或 `https://`（否则拼出来的是相对地址，图片会静默失效），末尾斜杠会被自动去掉；
+- 上传使用 `qiniu` SDK，`useHttpsDomain` 已显式开启（该选项默认为 `false`，会导致区域查询与上传走 http）；
+- 上传失败**不会**写入 `lm_album`，只会在服务端日志留下 `qiniu upload failed: ...`；
+- 七牛对象 key 形如 `image/YYYY-MM-DD/<uuid><ext>`，不只是为了防重名 —— 该 key 不能以 `/` 开头、不能包含 `public/uploads/`，否则会被 `url.util` 当成本地路径解析。
 
 ### 已知的既有问题
 
@@ -96,6 +128,10 @@ public/                         静态资源（/public 前缀）与上传目录
 `.txt .png .jpeg .jpg .zip .xls .ppt .doc .docx .pdf .xlsx .mp4 .wmv .avi .mov .flv .rmvb`，
 而前端 `components/upload/index.vue` 的 `accept` 允许 `.gif .ico .bmp`。选择这三类文件会被后端以
 `Invalid file type` 拒绝。该不一致为原实现既有问题，因涉及放行范围未擅自放宽，如需支持请显式加入白名单。
+
+另外，素材删除（`albumService.albumDel`）只做软删除（置 `is_delete=1`），**不会**删除本地磁盘文件或
+七牛云上的对象；而前端删除确认文案声称「本地或云存储文件也将同步删除」。该不一致为原实现既有问题，
+涉及不可逆的远端删除操作，未擅自补齐。
 
 ## 说明
 

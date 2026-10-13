@@ -62,10 +62,18 @@
                     </el-form-item>
                 </div>
                 <el-form-item label="状态" prop="status">
-                    <el-radio-group v-model="formData.status">
-                        <el-radio :label="0">关闭</el-radio>
-                        <el-radio :label="1">开启</el-radio>
-                    </el-radio-group>
+                    <div>
+                        <el-radio-group
+                            v-model="formData.status"
+                            :disabled="formData.alias === StorageEnum.LOCAL"
+                        >
+                            <el-radio :label="0">关闭</el-radio>
+                            <el-radio :label="1">开启</el-radio>
+                        </el-radio-group>
+                        <div v-if="formData.alias === StorageEnum.LOCAL" class="form-tips">
+                            本地存储为系统兜底存储，始终可用，不可关闭。如需切换回来，请关闭其它存储方式。
+                        </div>
+                    </div>
                 </el-form-item>
             </el-form>
         </popup>

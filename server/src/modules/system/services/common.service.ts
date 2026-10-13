@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import config from '../../../common/config';
 import urlUtil from '../../../common/utils/url.util';
+import { getStorageRuntime } from '../../../common/storage-context';
 import { SystemConfig } from '../../../models/system-config.model';
 
 const { version, publicUrl } = config;
@@ -69,12 +70,16 @@ export class CommonService {
       if (copyrightStr) {
         copyright = JSON.parse(copyrightStr);
       }
+      const { engine, qiniuDomain } = getStorageRuntime();
       return {
         webName: website.name,
         webLogo: urlUtil.toAbsoluteUrl(website.logo),
         webFavicon: urlUtil.toAbsoluteUrl(website.favicon),
         webBackdrop: urlUtil.toAbsoluteUrl(website.backdrop),
-        ossDomain: publicUrl,
+        // 装修 JSON 里存的是无域名的相对标识，前端用 `${ossDomain}${path}` 补前缀
+        //（admin/src/stores/modules/app.ts 的 getImageUrl）。七牛云引擎下必须换成空间域名，
+        // 否则装修组件会拼成本地地址。
+        ossDomain: engine === 'qiniu' && qiniuDomain ? qiniuDomain : publicUrl,
         copyright,
       };
     } catch (err) {
