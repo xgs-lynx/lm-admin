@@ -2,11 +2,16 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger } from '@nestjs/common';
 import * as path from 'path';
+// 必须用默认导入：`import * as hbs` 经 esModuleInterop 编译后会丢掉原型上的
+// registerPartials 等方法（仅复制自有属性），运行时 TypeError。
+import hbs from 'hbs';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
-// 项目根目录
+// 项目根目录（src 与 dist 的上一级都是 server/）
 const projectRoot = path.resolve(__dirname, '..');
+// 模板目录在 dist 之外，不随构建复制；生产部署时需与 dist、public 一并带上
+const viewsRoot = path.join(projectRoot, 'views');
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -17,6 +22,14 @@ async function bootstrap() {
   app.useStaticAssets(path.join(projectRoot, 'public'), {
     prefix: '/public/',
   });
+
+  // 视图引擎：Handlebars（hbs）。
+  // views/layout.hbs 会被自动套用到所有页面，页面内容通过 {{{body}}} 注入。
+  app.setBaseViewsDir(viewsRoot);
+  app.setViewEngine('hbs');
+  // 局部模板：views/partials/*.hbs，在页面中用 {{> 文件名}} 引用。
+  // 注册是异步的，hbs 会把期间到达的渲染请求排队，无需 await。
+  hbs.registerPartials(path.join(viewsRoot, 'partials'));
 
   // 跨域：对应原 egg-cors origin: '*'
   app.enableCors({

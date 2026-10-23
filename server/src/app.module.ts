@@ -11,6 +11,7 @@ import { CommonModule } from './modules/common/common.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { MonitorModule } from './modules/monitor/monitor.module';
 import { ClientModule } from './modules/client/client.module';
+import { WebModule } from './modules/web/web.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ClientModule } from './modules/client/client.module';
     SettingModule,
     MonitorModule,
     ClientModule,
+    WebModule,
   ],
   providers: [AuthMiddleware, ClientAuthMiddleware],
 })
