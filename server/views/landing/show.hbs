@@ -1,0 +1,42 @@
+<article class="landing">
+  <section class="landing-hero">
+    <div class="site-shell landing-hero__grid{{#if page.cover}} landing-hero__grid--with-media{{/if}}">
+      <div class="landing-hero__content">
+        <span class="landing-eyebrow">LANDING PAGE</span>
+        <h1 class="landing-title">{{page.title}}</h1>
+        {{#if page.subtitle}}
+        <p class="landing-subtitle">{{page.subtitle}}</p>
+        {{/if}}
+        {{#if page.ctaText}}
+        {{#if page.ctaLink}}
+        <a
+          class="landing-cta"
+          href="{{page.ctaLink}}"
+          {{#if page.ctaExternal}}target="_blank" rel="noopener noreferrer"{{/if}}
+        >{{page.ctaText}}</a>
+        {{/if}}
+        {{/if}}
+        {{#if page.updateTime}}
+        <p class="landing-updated">更新于 {{page.updateTime}}</p>
+        {{/if}}
+      </div>
+      {{#if page.cover}}
+      <div class="landing-hero__media">
+        <img
+          src="{{page.cover}}"
+          alt="{{page.title}}"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+      {{/if}}
+    </div>
+  </section>
+
+  {{#if page.content}}
+  <section class="site-shell landing-body">
+    <div class="landing-content">{{{page.content}}}</div>
+  </section>
+  {{/if}}
+</article>

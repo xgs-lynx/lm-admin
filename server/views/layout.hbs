@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#3b5bfd" />
+    {{#if robots}}
+    <meta name="robots" content="{{robots}}" />
+    {{/if}}
+    <title>{{title}}</title>
+    {{#if metaDescription}}
+    <meta name="description" content="{{metaDescription}}" />
+    {{/if}}
+    {{#if metaKeywords}}
+    <meta name="keywords" content="{{metaKeywords}}" />
+    {{/if}}
+    {{#if canonical}}
+    <link rel="canonical" href="{{canonical}}" />
+    {{/if}}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:title" content="{{title}}" />
+    {{#if site.webName}}
+    <meta property="og:site_name" content="{{site.webName}}" />
+    {{/if}}
+    {{#if metaDescription}}
+    <meta property="og:description" content="{{metaDescription}}" />
+    {{/if}}
+    {{#if canonical}}
+    <meta property="og:url" content="{{canonical}}" />
+    {{/if}}
+    {{#if ogImage}}
+    <meta property="og:image" content="{{ogImage}}" />
+    <meta property="og:image:alt" content="{{title}}" />
+    <link rel="preload" as="image" href="{{ogImage}}" fetchpriority="high" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="{{ogImage}}" />
+    {{else}}
+    <meta name="twitter:card" content="summary" />
+    {{/if}}
+    <meta name="twitter:title" content="{{title}}" />
+    {{#if metaDescription}}
+    <meta name="twitter:description" content="{{metaDescription}}" />
+    {{/if}}
+    {{#if site.webFavicon}}
+    <link rel="icon" href="{{site.webFavicon}}" />
+    {{/if}}
+    <link rel="stylesheet" href="/public/static/web/css/landing.css" />
+    {{#if structuredData}}
+    <script type="application/ld+json">{{{structuredData}}}</script>
+    {{/if}}
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    {{> web_header}}
+    <main id="main-content" class="site-main">{{{body}}}</main>
+    {{> web_footer}}
+  </body>
+</html>

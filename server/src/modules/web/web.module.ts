@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
+import { SystemModule } from '../system/system.module';
+import { LandingController } from './landing.controller';
+import { LandingWebController } from './landing-web.controller';
+import { LandingService } from './services/landing.service';
 
 /**
  * Web 前台模块（服务端渲染）。
@@ -8,7 +12,11 @@ import { Module } from '@nestjs/common';
  *  - 布局模板：views/layout.hbs（页面内容通过 {{{body}}} 注入）
  *  - 局部模板：views/partials/*.hbs
  *
- * 目前只留模块骨架，控制器 / 视图后续按需添加。
+ * 后台落地页管理接口挂在 /api/web/landing，公开展示页为 / 与 /landing/:slug。
  */
-@Module({})
+@Module({
+  imports: [SystemModule],
+  controllers: [LandingController, LandingWebController],
+  providers: [LandingService],
+})
 export class WebModule {}

@@ -1,0 +1,13 @@
+<header class="site-header">
+  <div class="site-shell site-header__inner">
+    <a class="site-brand" href="/">
+      {{#if site.webLogo}}
+      <img class="site-brand__logo" src="{{site.webLogo}}" alt="{{site.webName}}" />
+      {{/if}}
+      <span class="site-brand__name">{{#if site.webName}}{{site.webName}}{{else}}Website{{/if}}</span>
+    </a>
+    <nav class="site-nav" aria-label="主导航">
+      <a class="site-nav__link" href="/">首页</a>
+    </nav>
+  </div>
+</header>

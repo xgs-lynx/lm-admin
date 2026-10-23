@@ -8,6 +8,7 @@ export * from './decorate-tabbar.model';
 export * from './dict-data.model';
 export * from './dict-type.model';
 export * from './hot-search.model';
+export * from './landing-page.model';
 export * from './notice-setting.model';
 export * from './official-reply.model';
 export * from './system-auth-admin.model';
@@ -33,6 +34,7 @@ import { DecorateTabbar } from './decorate-tabbar.model';
 import { DictData } from './dict-data.model';
 import { DictType } from './dict-type.model';
 import { HotSearch } from './hot-search.model';
+import { LandingPage } from './landing-page.model';
 import { NoticeSetting } from './notice-setting.model';
 import { OfficialReply } from './official-reply.model';
 import { SystemAuthAdmin } from './system-auth-admin.model';
@@ -60,6 +62,7 @@ export const ALL_MODELS = [
   DictData,
   DictType,
   HotSearch,
+  LandingPage,
   NoticeSetting,
   OfficialReply,
   SystemAuthAdmin,

@@ -193,6 +193,39 @@ INSERT INTO `lm_decorate_tabbar` (`id`, `name`, `selected`, `unselected`, `link`
 COMMIT;
 
 -- ----------------------------
+-- Table structure for lm_landing_page
+-- ----------------------------
+DROP TABLE IF EXISTS `lm_landing_page`;
+CREATE TABLE `lm_landing_page` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `title` varchar(200) NOT NULL DEFAULT '' COMMENT '页面标题',
+  `slug` varchar(100) NOT NULL DEFAULT '' COMMENT '访问别名',
+  `subtitle` varchar(300) NOT NULL DEFAULT '' COMMENT '副标题',
+  `cover` varchar(255) NOT NULL DEFAULT '' COMMENT '封面图',
+  `cta_text` varchar(100) NOT NULL DEFAULT '' COMMENT '按钮文案',
+  `cta_link` varchar(500) NOT NULL DEFAULT '' COMMENT '按钮链接',
+  `content` mediumtext COMMENT '富文本内容',
+  `seo_title` varchar(200) NOT NULL DEFAULT '' COMMENT 'SEO 标题',
+  `seo_keywords` varchar(255) NOT NULL DEFAULT '' COMMENT 'SEO 关键词',
+  `seo_description` varchar(500) NOT NULL DEFAULT '' COMMENT 'SEO 描述',
+  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序，越大越靠前',
+  `is_show` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否发布: 0=否, 1=是',
+  `is_delete` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除: 0=否, 1=是',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `delete_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_slug` (`slug`) USING BTREE,
+  KEY `idx_show_sort` (`is_show`,`is_delete`,`sort`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='落地页表';
+
+-- ----------------------------
+-- Records of lm_landing_page
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for lm_dict_data
 -- ----------------------------
 DROP TABLE IF EXISTS `lm_dict_data`;
@@ -470,6 +503,13 @@ INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_
 INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (600, 0, 'M', '开发工具', 'el-icon-EditPen', 0, '', 'dev_tools', '', '', '', 0, 1, 0, 1660027606, 1664335701);
 INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (700, 0, 'M', '素材管理', 'el-icon-Picture', 43, '', 'material', '', '', '', 0, 1, 0, 1660203293, 1663300847);
 INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (701, 700, 'C', '素材中心', 'el-icon-PictureRounded', 0, '', 'index', 'material/index', '', '', 0, 1, 0, 1660203402, 1663301493);
+INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (710, 0, 'M', '官网管理', 'el-icon-Monitor', 42, '', 'web', '', '', '', 0, 1, 0, 1792763974, 1792763974);
+INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (711, 710, 'C', '落地页管理', 'el-icon-Document', 0, 'web:landing:list', 'landing', 'web/landing/index', '', '', 1, 1, 0, 1792763974, 1792763974);
+INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (712, 710, 'C', '落地页编辑', '', 0, 'web:landing:edit', 'landing/edit', 'web/landing/edit', '/web/landing', '', 0, 0, 0, 1792763974, 1792763974);
+INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (713, 711, 'A', '落地页详情', '', 0, 'web:landing:detail', '', '', '', '', 0, 1, 0, 1792763974, 1792763974);
+INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (714, 711, 'A', '落地页新增', '', 0, 'web:landing:add', '', '', '', '', 0, 1, 0, 1792763974, 1792763974);
+INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (715, 711, 'A', '落地页删除', '', 0, 'web:landing:del', '', '', '', '', 0, 1, 0, 1792763974, 1792763974);
+INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (716, 711, 'A', '落地页状态', '', 0, 'web:landing:change', '', '', '', '', 0, 1, 0, 1792763974, 1792763974);
 COMMIT;
 
 -- ----------------------------

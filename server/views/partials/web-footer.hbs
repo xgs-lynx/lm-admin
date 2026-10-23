@@ -1,0 +1,14 @@
+<footer class="site-footer">
+  <div class="site-shell site-footer__inner">
+    <div class="site-footer__copy">
+      &copy; {{year}} {{#if site.webName}}{{site.webName}}{{else}}Website{{/if}}
+    </div>
+    {{#if site.copyright}}
+    <div class="site-footer__links">
+      {{#each site.copyright}}
+      <a href="{{this.link}}" target="_blank" rel="noopener noreferrer">{{this.name}}</a>
+      {{/each}}
+    </div>
+    {{/if}}
+  </div>
+</footer>
