@@ -43,6 +43,34 @@
                             show-word-limit
                         />
                     </el-form-item>
+                    <el-form-item label="页面模板" prop="templateFile" class="xl:col-span-2">
+                        <div class="w-full">
+                            <el-select
+                                v-model="formData.templateFile"
+                                class="w-full"
+                                placeholder="请选择页面模板"
+                                filterable
+                                :loading="templateLoading"
+                            >
+                                <el-option
+                                    v-for="item in templateOptions"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                />
+                                <el-option
+                                    v-if="missingTemplate"
+                                    :label="`${formData.templateFile}（模板文件不存在）`"
+                                    :value="formData.templateFile"
+                                    disabled
+                                />
+                            </el-select>
+                            <div class="form-tips">
+                                模板文件位于
+                                server/views/landing/templates，保存后前台使用所选模板渲染
+                            </div>
+                        </div>
+                    </el-form-item>
                     <el-form-item label="封面图" prop="cover">
                         <div>
                             <material-picker v-model="formData.cover" :limit="1" />
@@ -159,7 +187,7 @@
 <script lang="ts" setup name="webLandingEdit">
 import type { FormInstance } from 'element-plus'
 import config from '@/config'
-import { landingPageAdd, landingPageDetail, landingPageEdit } from '@/api/web'
+import { landingPageAdd, landingPageDetail, landingPageEdit, landingPageTemplates } from '@/api/web'
 import { getRoutePath } from '@/router'
 import useMultipleTabs from '@/hooks/useMultipleTabs'
 import feedback from '@/utils/feedback'
@@ -177,11 +205,15 @@ const goBack = async () => {
     removeTab(fullPath)
 }
 
+const templateOptions = ref<any[]>([])
+const templateLoading = ref(false)
+
 const formData = reactive({
     id: '',
     title: '',
     slug: '',
     subtitle: '',
+    templateFile: 'default.hbs',
     cover: '',
     ctaText: '',
     ctaLink: '',
@@ -192,6 +224,12 @@ const formData = reactive({
     sort: 0,
     isShow: 1
 })
+
+const missingTemplate = computed(
+    () =>
+        !!formData.templateFile &&
+        !templateOptions.value.some((item) => item.value === formData.templateFile)
+)
 
 const seoPreview = computed(() => ({
     url: `${config.baseUrl}landing/${formData.slug || 'your-page'}`,
@@ -236,6 +274,18 @@ const getDetails = async () => {
     })
 }
 
+const loadTemplates = async () => {
+    templateLoading.value = true
+    try {
+        const data = await landingPageTemplates()
+        templateOptions.value = Array.isArray(data) ? data : []
+    } catch (error) {
+        templateOptions.value = []
+    } finally {
+        templateLoading.value = false
+    }
+}
+
 const handleSave = async () => {
     await formRef.value?.validate()
     if (isEdit.value) {
@@ -248,6 +298,7 @@ const handleSave = async () => {
 }
 
 route.query.id && getDetails()
+loadTemplates()
 </script>
 
 <style lang="scss" scoped>

@@ -76,6 +76,12 @@
                         <span class="text-tx-secondary">/landing/{{ row.slug }}</span>
                     </template>
                 </el-table-column>
+                <el-table-column
+                    label="页面模板"
+                    prop="templateFile"
+                    min-width="130"
+                    show-tooltip-when-overflow
+                />
                 <el-table-column label="发布状态" width="110">
                     <template #default="{ row }">
                         <el-switch

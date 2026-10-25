@@ -24,10 +24,12 @@ async function bootstrap() {
   });
 
   // 视图引擎：Handlebars（hbs）。
-  // views/layout.hbs 会被自动套用到所有页面，页面内容通过 {{{body}}} 注入。
+  // 全局布局：views/layouts/default.hbs，页面内容通过 {{{body}}} 注入。
   app.setBaseViewsDir(viewsRoot);
   app.setViewEngine('hbs');
-  // 局部模板：views/partials/*.hbs，在页面中用 {{> 文件名}} 引用。
+  // 通过 view options 指定布局，避免依赖 hbs 默认的根目录 layout.hbs。
+  app.set('view options', { layout: 'layouts/default' });
+  // 局部模板：views/partials/{header,footer}.hbs，在布局中用 {{> header}} / {{> footer}} 引用。
   // 注册是异步的，hbs 会把期间到达的渲染请求排队，无需 await。
   hbs.registerPartials(path.join(viewsRoot, 'partials'));
 

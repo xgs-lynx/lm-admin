@@ -160,6 +160,28 @@ img {
   max-width: 720px;
 }
 
+.landing-hero--centered {
+  padding-top: clamp(64px, 12vw, 132px);
+  padding-bottom: clamp(64px, 10vw, 112px);
+}
+
+.landing-hero__content--centered {
+  max-width: 900px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.landing-hero__content--centered .landing-eyebrow {
+  justify-content: center;
+}
+
+.landing-hero__content--centered .landing-subtitle {
+  margin-inline: auto;
+}
+
 .landing-eyebrow {
   display: inline-flex;
   align-items: center;

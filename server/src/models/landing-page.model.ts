@@ -48,6 +48,14 @@ export class LandingPage extends Model<LandingPage> {
   })
   ctaLink: string;
 
+  @Column({
+    type: DataType.STRING(100),
+    allowNull: false,
+    defaultValue: 'default.hbs',
+    field: 'template_file',
+  })
+  templateFile: string;
+
   @Column({ type: DataType.TEXT('medium'), allowNull: true, defaultValue: '' })
   content: string;
 

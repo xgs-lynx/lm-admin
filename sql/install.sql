@@ -204,6 +204,7 @@ CREATE TABLE `lm_landing_page` (
   `cover` varchar(255) NOT NULL DEFAULT '' COMMENT '封面图',
   `cta_text` varchar(100) NOT NULL DEFAULT '' COMMENT '按钮文案',
   `cta_link` varchar(500) NOT NULL DEFAULT '' COMMENT '按钮链接',
+  `template_file` varchar(100) NOT NULL DEFAULT 'default.hbs' COMMENT '落地页模板文件',
   `content` mediumtext COMMENT '富文本内容',
   `seo_title` varchar(200) NOT NULL DEFAULT '' COMMENT 'SEO 标题',
   `seo_keywords` varchar(255) NOT NULL DEFAULT '' COMMENT 'SEO 关键词',
@@ -510,6 +511,7 @@ INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_
 INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (714, 711, 'A', '落地页新增', '', 0, 'web:landing:add', '', '', '', '', 0, 1, 0, 1792763974, 1792763974);
 INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (715, 711, 'A', '落地页删除', '', 0, 'web:landing:del', '', '', '', '', 0, 1, 0, 1792763974, 1792763974);
 INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (716, 711, 'A', '落地页状态', '', 0, 'web:landing:change', '', '', '', '', 0, 1, 0, 1792763974, 1792763974);
+INSERT INTO `lm_system_auth_menu` (`id`, `pid`, `menu_type`, `menu_name`, `menu_icon`, `menu_sort`, `perms`, `paths`, `component`, `selected`, `params`, `is_cache`, `is_show`, `is_disable`, `create_time`, `update_time`) VALUES (717, 711, 'A', '落地页模板列表', '', 0, 'web:landing:templates', '', '', '', '', 0, 1, 0, 1792763974, 1792763974);
 COMMIT;
 
 -- ----------------------------

@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { promises as fs } from 'fs';
+import * as path from 'path';
 import { Op } from 'sequelize';
 import { BusinessException } from '../../../common/exceptions/business.exception';
 import urlUtil from '../../../common/utils/url.util';
 import { LandingPage } from '../../../models/landing-page.model';
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const TEMPLATES_DIR = path.resolve(__dirname, '../../../../views/landing/templates');
+const DEFAULT_TEMPLATE = 'default.hbs';
+const TEMPLATE_FILE_RE = /^[A-Za-z0-9][A-Za-z0-9_-]*\.hbs$/;
 
 @Injectable()
 export class LandingService {
@@ -64,6 +69,7 @@ export class LandingService {
   async adminAdd(addReq: any) {
     try {
       const payload = this.buildPayload(addReq);
+      await this.ensureTemplateValid(payload.templateFile);
       await this.ensureSlugUnique(payload.slug);
 
       const now = Math.floor(Date.now() / 1000);
@@ -83,6 +89,7 @@ export class LandingService {
     try {
       const page = await this.findExisting(editReq.id);
       const payload = this.buildPayload(editReq);
+      await this.ensureTemplateValid(payload.templateFile);
       await this.ensureSlugUnique(payload.slug, page.id);
 
       await page.update({
@@ -170,6 +177,38 @@ export class LandingService {
     }
   }
 
+  async listTemplates() {
+    try {
+      const entries = await fs.readdir(TEMPLATES_DIR, { withFileTypes: true });
+      return entries
+        .filter(entry => entry.isFile() && TEMPLATE_FILE_RE.test(entry.name))
+        .map(entry => ({ value: entry.name, label: entry.name }))
+        .sort((a, b) => {
+          if (a.value === DEFAULT_TEMPLATE) return -1;
+          if (b.value === DEFAULT_TEMPLATE) return 1;
+          return a.value.localeCompare(b.value);
+        });
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+        return [];
+      }
+      this.rethrow(err, 'LandingService.listTemplates error');
+    }
+  }
+
+  async resolveTemplateView(templateFile?: string) {
+    const file = String(templateFile || '').trim() || DEFAULT_TEMPLATE;
+    if (TEMPLATE_FILE_RE.test(file)) {
+      try {
+        await fs.access(path.join(TEMPLATES_DIR, file));
+        return `landing/templates/${file.replace(/\.hbs$/i, '')}`;
+      } catch {
+        // 模板文件被删除时回退到默认模板
+      }
+    }
+    return `landing/templates/${DEFAULT_TEMPLATE.replace(/\.hbs$/i, '')}`;
+  }
+
   private buildPayload(req: any) {
     const title = this.cleanText(req.title, '页面标题', 200);
     if (!title) {
@@ -186,6 +225,7 @@ export class LandingService {
       throw new BusinessException('按钮链接仅支持 http(s):// 或 / 开头的地址');
     }
 
+    const templateFile = this.cleanText(req.templateFile, '落地页模板', 100) || DEFAULT_TEMPLATE;
     const sortValue = Number(req.sort);
     return {
       title,
@@ -194,6 +234,7 @@ export class LandingService {
       cover: urlUtil.toRelativeUrl(this.cleanText(req.cover, '封面图', 255)),
       ctaText: this.cleanText(req.ctaText, '按钮文案', 100),
       ctaLink,
+      templateFile,
       content: this.cleanContent(req.content),
       seoTitle: this.cleanText(req.seoTitle, 'SEO 标题', 200),
       seoKeywords: this.cleanText(req.seoKeywords, 'SEO 关键词', 255),
@@ -222,6 +263,16 @@ export class LandingService {
       return '';
     }
     return content;
+  }
+
+  private async ensureTemplateValid(templateFile: string) {
+    if (!TEMPLATE_FILE_RE.test(templateFile)) {
+      throw new BusinessException('落地页模板文件不合法');
+    }
+    const templates = await this.listTemplates();
+    if (!templates.some(item => item.value === templateFile)) {
+      throw new BusinessException('所选落地页模板不存在！');
+    }
   }
 
   private async findExisting(id: any) {

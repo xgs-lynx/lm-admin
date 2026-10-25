@@ -5,6 +5,11 @@ export function landingPageLists(params?: any) {
     return request.get({ url: '/web/landing/list', params })
 }
 
+// 落地页模板文件列表
+export function landingPageTemplates() {
+    return request.get({ url: '/web/landing/templates' })
+}
+
 // 落地页详情
 export function landingPageDetail(params: any) {
     return request.get({ url: '/web/landing/detail', params }, { ignoreCancelToken: true })

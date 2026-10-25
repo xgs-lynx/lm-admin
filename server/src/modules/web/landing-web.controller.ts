@@ -33,7 +33,7 @@ export class LandingWebController {
       return;
     }
 
-    this.renderPage(res, page, viewData);
+    await this.renderPage(res, page, viewData);
   }
 
   @Get('landing/:slug')
@@ -45,7 +45,7 @@ export class LandingWebController {
     }
 
     const viewData = await this.buildSiteData();
-    this.renderPage(res, page, viewData);
+    await this.renderPage(res, page, viewData);
   }
 
   @Get('sitemap.xml')
@@ -147,13 +147,14 @@ export class LandingWebController {
     });
   }
 
-  private renderPage(res: Response, page: any, viewData: any) {
+  private async renderPage(res: Response, page: any, viewData: any) {
     const base = this.publicBase();
     const canonical = base ? `${base}${page.url}` : page.url;
     const title = page.seoTitle || this.withSiteName(page.title, viewData.site.webName);
     const metaDescription = page.seoDescription || page.subtitle || this.plainText(page.content);
+    const template = await this.landing.resolveTemplateView(page.templateFile);
 
-    res.render('landing/show', {
+    res.render(template, {
       ...viewData,
       title,
       metaDescription,

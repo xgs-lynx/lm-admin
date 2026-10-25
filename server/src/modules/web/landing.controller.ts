@@ -11,6 +11,11 @@ export class LandingController {
     return ok(await this.landing.adminList(listReq));
   }
 
+  @Get('templates')
+  async templates(): Promise<ApiResult> {
+    return ok(await this.landing.listTemplates());
+  }
+
   @Get('detail')
   async detail(@Query('id') id: number): Promise<ApiResult> {
     return ok(await this.landing.adminDetail(id));
